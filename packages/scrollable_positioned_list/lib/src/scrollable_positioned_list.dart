@@ -293,6 +293,13 @@ class ScrollOffsetController {
     );
   }
 
+  Future<void> jumpTo({required double offset}) async {
+    final currentPosition =
+        _scrollableListState!.primary.scrollController.offset;
+    final newPosition = currentPosition + offset;
+    _scrollableListState!.primary.scrollController.jumpTo(newPosition);
+  }
+
   Future<void> scrollToEnd({
     required Duration duration,
     Curve curve = Curves.linear,
@@ -308,6 +315,8 @@ class ScrollOffsetController {
 
   _ScrollablePositionedListState? _scrollableListState;
 
+  ScrollPosition get position =>  _scrollableListState!.primary.scrollController.position;
+  
   void _attach(_ScrollablePositionedListState scrollableListState) {
     assert(_scrollableListState == null);
     _scrollableListState = scrollableListState;
