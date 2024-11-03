@@ -296,18 +296,16 @@ class ScrollOffsetController {
   Future<void> scrollToEnd({
     required Duration duration,
     Curve curve = Curves.linear,
-    List<double> opacityAnimationWeights = const [40, 20, 40],
-  }) {
+  }) async {
     assert(_scrollableListState != null);
-    assert(opacityAnimationWeights.length == 3);
     assert(duration > Duration.zero);
-    return _scrollableListState!._scrollToEnd(
+    await _scrollableListState!.primary.scrollController.animateTo(
+      _scrollableListState!.primary.scrollController.position.maxScrollExtent,
       duration: duration,
       curve: curve,
-      opacityAnimationWeights: opacityAnimationWeights,
     );
   }
-  
+
   _ScrollablePositionedListState? _scrollableListState;
 
   void _attach(_ScrollablePositionedListState scrollableListState) {
@@ -548,33 +546,6 @@ class _ScrollablePositionedListState extends State<ScrollablePositionedList>
     }
   }
 
-  Future<void> _scrollToEnd({
-    required Duration duration,
-    Curve curve = Curves.linear,
-    required List<double> opacityAnimationWeights,
-  }) async {
-    if (_isTransitioning) {
-      _stopScroll(canceled: true);
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        _startScrollOffset(
-          offset: primary.scrollController.position.maxScrollExtent - primary.scrollController.position.pixels,
-          alignment: 0,
-          duration: duration,
-          curve: curve,
-          opacityAnimationWeights: opacityAnimationWeights,
-        );
-      });
-    } else {
-      await _startScrollOffset(
-        offset: primary.scrollController.position.maxScrollExtent - primary.scrollController.position.pixels,
-        alignment: 0,
-        duration: duration,
-        curve: curve,
-        opacityAnimationWeights: opacityAnimationWeights,
-      );
-    }
-  }
-  
   Future<void> _startScroll({
     required int index,
     required double alignment,
