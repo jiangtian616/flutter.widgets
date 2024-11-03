@@ -293,11 +293,8 @@ class ScrollOffsetController {
     );
   }
 
-  Future<void> jumpTo({required double offset}) async {
-    final currentPosition =
-        _scrollableListState!.primary.scrollController.offset;
-    final newPosition = currentPosition + offset;
-    _scrollableListState!.primary.scrollController.jumpTo(newPosition);
+  void jumpTo({required double value}) async {
+    _scrollableListState!.primary.scrollController.jumpTo(value);
   }
 
   Future<void> scrollToEnd({
